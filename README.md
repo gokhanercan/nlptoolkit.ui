@@ -5,3 +5,7 @@ This project includes some user interface implemetations of the Olcay Taner's nl
 http://haydut.isikun.edu.tr/nlptoolkit.html 
 
 https://github.com/olcaytaner
+
+DEMO 
+Follow the link to see the screens in action.
+http://www.gokhanercan.com:8090/nlptoolkit.ui-1.0/#!Main
