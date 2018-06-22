@@ -1,13 +1,5 @@
 1) Checkout to Repository
-
-Setup an SVN client:
-- SVN için Intellij içinde Settings->Plugins "Subversion Integration" ile IntelliJ içerisinden entegre edilebilir.
-- Filesystem client: https://tortoisesvn.net/downloads.html
-
-Project repo:
-repo url:         https://gokhanercan.com:8443/svn/MLPractices/trunk/Projects/nlptoolkit.ui
-Ask gokhan for auth infos.
-SVN ile repo'yu checkout edeceksin. (git dilinde clone)
+Github repo url:         https://github.com/gokhanercan/nlptoolkit.ui
 
 2) Intellij
 Bu kodu intellij'de project import ya da open ile açabilirsin.
@@ -21,7 +13,7 @@ https://www.jetbrains.com/help/idea/getting-started-with-vaadin-maven-project.ht
 Maven önce birşeyler download edecek projeye şaşırma. pom.xml dosyasında bağımlılıkları download ediyor. "Make" de tetiklemek için.
 
 4) Ref nlptoolkit:
-Nlp framework'ümüz alt klasörde derlenmiş jar halinde https://gokhanercan.com:8443/svn/MLPractices/trunk/Projects/nlptoolkit.ui/src/main/webapp/WEB-INF/lib/
+nlptoolkit framework klasörde derlenmiş jar'lar halinde: https://github.com/gokhanercan/nlptoolkit.ui/tree/master/src/main/webapp/WEB-INF/lib
 F7 ile Make dediğinde herşey derleniyorsa işler yolunda demektir.
 
 5) Running/Debugging Project:
@@ -29,19 +21,4 @@ Projeyi run/debug edebilmek için https://www.jetbrains.com/help/idea/getting-st
 "Configure run/debug settings and run application" bölümüne bakabilirsin.  "Mvn jetty" gibi bir komut var. Aslında ben o komutu çalıştıran bir bat file koydum root'a. Ama bu editör entegrasyonu için degub edebil diye.
 Jetty server bir kere run edildikten sonra http://localhost:8080/ adresinden uygulama test edilebilir.
 
-6) Deployment PreProd (Bitmedi !)
-Geliştirme bitti ise projeyi yayına atmak için aşağıdaki adımları uygulayabilirsiniz:
-    6.0 - Projeyi Make ve compile ettikten sonra. (Make | Make module nlptoolkit.ui | Rebuild Project)
-    6.1 - PackageWebServer.bat dosyasını çalıştırın (ya da root'ta run 'mvc package'), herşey yolunda gider ise target folder'ı içerisine nlptoolkit.ui-1.0.war dosyasının oluştuğunu görün.
-    6.2 - O tek dosya compressed hali. Onu kullanmaya gerek yok. 'target/nlptoolkit.ui-1.0' klasörü içinde gereki resource ve class'lar derlenmiş olacaktır.
-    6.3 - Size iletilmiş olan ftp bilgileri ile herhangi ftp client ile ilgili 'target/nlptoolkit.ui-1.0' içindeki (.war hariç) dosyaları yükleyiniz. https://trello.com/c/S5HTLn0Q/30-prod-ftp-info
-    6.4 - Yayındaki projenin kendini refresh etmesi için WEB-INF\web.xml dosyasını bir kere güncellemeniz yeterlidir.
-    6.4 - Yayının güncellenmiş olması gerekir. http://www.gokhanercan.com:8090/nlptoolkit.ui-1.0
-
-7) Deployment Prod
-- Proje tamamlandığında farklı bir sunucuya yüklenecek. Henüz o bilgiler elimizde yok.
-
-
-Son güncelleme:
-Gökhan, 22.02.2018
-Gökhan, 24.12.2017
+6) Deployment kılavuzu için Gökhan'a ulaşın.
