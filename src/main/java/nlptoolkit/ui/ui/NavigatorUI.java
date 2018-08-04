@@ -25,7 +25,6 @@ public class NavigatorUI extends UI {
 
         //Register views.
         RegisterNLPView(new MorphologicalAnalyzerDisambiguatorView());
-        RegisterNLPView(new MAWrapperView());
         RegisterNLPView(new SyllabificationView());
         RegisterNLPView(new SentenceSplitterView());
         RegisterNLPView(new AsciifierDeasciifierView());

@@ -13,12 +13,8 @@ import MorphologicalDisambiguation.MorphologicalDisambiguator;
 import MorphologicalDisambiguation.RootFirstDisambiguation;
 import Ngram.NGram;
 
-import Service.MAService;
 import Syllibification.IrregularWordException;
 import Syllibification.SyllableList;
-import Wrappers.IExternalMorphologicalAnalyzer;
-import Wrappers.TRMorphWrapper;
-import Wrappers.WordAnalysis;
 import nlptoolkit.ui.nlp.DeascifierTypes;
 //import nlptoolkit.ui.nlp.TurkishSyllabification;
 //import nlptoolkit.ui.services.dto.DisambiguatedAnalysisDTO;
@@ -41,6 +37,7 @@ import Deasciifier.*;
     private FsmMorphologicalAnalyzer _Analyzer = null;          //TODO: Make it singleton across screens. not only this instance. https://trello.com/c/epBpGk1R/38-make-shared-services-singleton-across-views
     private MorphologicalDisambiguator _Disambiguator = null;       //TODO: Make it singleton across screens.
     NGram<Word> nGram;  //TODO: https://trello.com/c/epBpGk1R/38-make-shared-services-singleton-across-views
+
 
     private FsmMorphologicalAnalyzer getAnalyzer(){
         if (_Analyzer == null){     //supports only single instance for now!
@@ -159,18 +156,4 @@ import Deasciifier.*;
 //         DisambiguatedAnalysisDTO dto = new DisambiguatedAnalysisDTO(words,);
 //         return dto;
 //     }
-
-     public WordAnalysis MorphologicallyAnalyzeExternally(String word, ExternalMorphologicalAnalyzerTypes maType){      //TODO: Manage folders, dependencies etc here.. pass analyzer enum.
-         MAService maService = new MAService();
-         IExternalMorphologicalAnalyzer analyzer = CreateExternalMorphologicalAnalyzer(maType);
-         return maService.AnalyzeWord(word,analyzer);
-     }
-     protected IExternalMorphologicalAnalyzer CreateExternalMorphologicalAnalyzer(ExternalMorphologicalAnalyzerTypes type){
-         switch (type){
-             case TRMorph:
-                 return new TRMorphWrapper("C:\\PROJECTS\\MLPractices\\Projects\\TRmorph","WinLauncher.bat");
-             default:
-                 throw new RuntimeException("No such MA!");
-         }
-     }
  }
