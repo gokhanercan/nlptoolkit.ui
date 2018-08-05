@@ -3,6 +3,7 @@ package nlptoolkit.ui.ui.views;
 import Corpus.Sentence;
 import MorphologicalAnalysis.FsmParse;
 import MorphologicalAnalysis.FsmParseList;
+import com.sun.javafx.embed.HostInterface;
 import com.vaadin.sass.internal.parser.ParseException;
 import com.vaadin.ui.*;
 import nlptoolkit.ui.services.NLPService;
@@ -23,13 +24,21 @@ public class MorphologicalAnalyzerDisambiguatorView extends NLPView {
     public MorphologicalAnalyzerDisambiguatorView() {
 
         final VerticalLayout layout = new VerticalLayout();
+        HorizontalLayout console = new HorizontalLayout();
+        console.setSizeFull();
+        console.setResponsive(true);
         TextField txtInput = new TextField("Type sentence to morphologically analyze:", _InitialSentences);
-        txtInput.setSizeFull();
-        Button btnAnalyze = new Button("Analyze");
-        Button btnDisambiguate = new Button("Analyze & Disambiguate");
 
-        layout.addComponents(txtInput,btnAnalyze);
-        //layout.addComponent(btnDisambiguate);
+        txtInput.setSizeFull();
+        txtInput.setResponsive(true);
+        Button btnAnalyze = new Button("Analyze");
+        btnAnalyze.setSizeUndefined();
+        //Button btnDisambiguate = new Button("Analyze & Disambiguate");
+
+        console.addComponents(txtInput,btnAnalyze);
+        console.setExpandRatio(txtInput,100);       //textbox'a expand etme şansı veriyor.
+
+        layout.addComponents(console);
         layout.addComponent(WordsContainer);
 
         NLPService nlpService = new NLPService();

@@ -5,18 +5,21 @@ import Wrappers.IExternalMorphologicalAnalyzer;
 import Wrappers.WordAnalysis;
 
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import nlptoolkit.ui.services.ExternalMorphologicalAnalyzerTypes;
 import nlptoolkit.ui.services.NLPService;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class MAWrapperView extends NLPView {
 
     final String _InitialSentences = "okudum";
-    HorizontalLayout WordsContainer = new HorizontalLayout();       //yan yana dizer.
+    //HorizontalLayout WordsContainer = new HorizontalLayout();       //yan yana dizer.
     Label LblResult;
+    private VerticalLayout Layout;
 
     @Override
     public String GetScreenName() {
@@ -25,9 +28,16 @@ public class MAWrapperView extends NLPView {
 
     public MAWrapperView() {
 
-        final VerticalLayout layout = new VerticalLayout();
-        TextField txtInput = new TextField("Type a word to morphologically analyze:", _InitialSentences);
+        Layout = new VerticalLayout();
+        addComponent(Layout);
+        final HorizontalLayout console = new HorizontalLayout();
+
+        console.setSizeFull();
+        console.setMargin(false);
+        Layout.addComponent(console);
+        TextField txtInput = new TextField(null, _InitialSentences);
         txtInput.setSizeFull();
+        txtInput.setResponsive(true);
         Button btnAnalyze = new Button("Analyze");
         LblResult = new Label("", ContentMode.PREFORMATTED);
 
@@ -38,8 +48,8 @@ public class MAWrapperView extends NLPView {
         cmbMATypes.setEmptySelectionAllowed(false);
         cmbMATypes.setTextInputAllowed(false);
 
-        layout.addComponents(txtInput,cmbMATypes,btnAnalyze);
-        layout.addComponent(LblResult);
+        console.addComponents(txtInput,cmbMATypes,btnAnalyze);
+        console.setExpandRatio(txtInput,100);       //textbox'a en fazla genişleme yetkisini veriyor.
 
         //Grid
         Grid<IExternalMorphologicalAnalyzer> grid = new Grid<>();
@@ -56,13 +66,10 @@ public class MAWrapperView extends NLPView {
                 ExternalMorphologicalAnalyzerTypes maType = ExternalMorphologicalAnalyzerTypes.valueOf(maTypeStr);
                 WordAnalysis wordAnalysis = nlpService.MorphologicallyAnalyzeExternally(word, maType);
                 LblResult.setValue(org.apache.commons.lang3.StringUtils.join(wordAnalysis.Results,"\n"));
+                Layout.addComponent(LblResult);
             }
 
         });
-
-        //styles.
-        addComponent(layout);
-        WordsContainer.setSizeUndefined();
     }
 
     private GridLayout Grid = null;
@@ -71,6 +78,8 @@ public class MAWrapperView extends NLPView {
         if(!isFirstRender) removeComponent(Grid);
 
         GridLayout grid = new GridLayout(4,2);
+        grid.setSpacing(false);
+        grid.setMargin(false);
         grid.addStyleName("outlined");
         grid.setSizeFull();
         grid.setResponsive(true);
@@ -103,6 +112,11 @@ public class MAWrapperView extends NLPView {
     }
 
     private void ClearAnalysis(){
+        Layout.removeComponent(LblResult);
         LblResult.setValue("");
+        if(Grid != null) {
+            removeComponent(Grid);
+            Grid = null;
+        }
     }
 }
