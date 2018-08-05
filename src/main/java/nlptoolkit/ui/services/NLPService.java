@@ -16,6 +16,7 @@ import Ngram.NGram;
 import Service.MAService;
 import Syllibification.IrregularWordException;
 import Syllibification.SyllableList;
+import Wrappers.Dilbaz.DilbazWrapper;
 import Wrappers.IExternalMorphologicalAnalyzer;
 import Wrappers.ITU.ITUWebWrapper;
 import Wrappers.TRMorph.TRMorphWrapper;
@@ -36,6 +37,8 @@ import java.util.Arrays;
 
 import SpellChecker.*;
 import Deasciifier.*;
+
+import static nlptoolkit.ui.services.ExternalMorphologicalAnalyzerTypes.Dilbaz;
 
  public class NLPService {
 
@@ -165,6 +168,9 @@ import Deasciifier.*;
                  return new ZemberekWrapper();
              case ITUWeb:
                  return new ITUWebWrapper();
+             case Dilbaz:
+                 return new DilbazWrapper(getAnalyzer());
+
              default:
                  throw new RuntimeException("No such MA!");
          }
