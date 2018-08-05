@@ -31,7 +31,7 @@
 <with name="^DB+VERB+ZERO+PRES+A1PL" topos="VERB">yHz</with>
 <with name="^DB+VERB+ZERO+PRES+A2PL" topos="VERB">SHnHz</with>
 <with name="^DB+VERB+ZERO+PRES+A3PL" topos="VERB">lAr</with>
-</to>
+</to>    
 <to name="NominalVerb1">
 <with name="^DB+VERB+ZERO+PAST" topos="VERB">yDH</with>
 <with name="^DB+VERB+ZERO+COND" topos="VERB">ysA</with>
@@ -46,7 +46,7 @@
 <state name="AdverbRoot" start="yes" end="yes" originalpos="ADVERB">
 </state>
 <state name="CardinalRoot" start="yes" end="yes" originalpos="NUM">
-<to name="NominalRoot">
+<to name="NominalRoot(NUMBER)">
 <with name="^DB+NOUN+NESS" topos="NOUN">lHk</with>
 <with name="^DB+NOUN+ZERO" topos="NOUN">0</with>
 <with name="^DB+NOUN+ORD" topos="NOUN">HncH</with>
@@ -76,7 +76,7 @@
 </to>
 </state>
 <state name="FractionRoot" start="yes" end="yes" originalpos="NUM">
-<to name="NominalRoot">
+<to name="NominalRoot(NUMBER)">
 <with name="^DB+NOUN+NESS" topos="NOUN">lHk</with>
 <with name="^DB+NOUN+ZERO" topos="NOUN">0</with>
 </to>
@@ -99,7 +99,7 @@
 </to>
 </state>
 <state name="DateRoot" start="yes" end="yes" originalpos="NUM">
-        <to name="NominalRoot">
+        <to name="NominalRoot(NUMBER)">
             <with name="^DB+NOUN+ZERO" topos="NOUN">0</with>
         </to>
         <to name="NominalVerb">
@@ -121,7 +121,7 @@
         </to>
     </state>
 <state name="PercentRoot" start="yes" end="yes" originalpos="NUM">
-        <to name="NominalRoot">
+        <to name="NominalRoot(NUMBER)">
             <with name="^DB+NOUN+ZERO" topos="NOUN">0</with>
         </to>
         <to name="NominalVerb">
@@ -143,7 +143,7 @@
         </to>
     </state>
 <state name="RangeRoot" start="yes" end="yes" originalpos="NUM">
-        <to name="NominalRoot">
+        <to name="NominalRoot(NUMBER)">
             <with name="^DB+NOUN+ZERO" topos="NOUN">0</with>
         </to>
         <to name="NominalVerb">
@@ -165,7 +165,7 @@
         </to>
     </state>
 <state name="TimeRoot" start="yes" end="yes" originalpos="NUM">
-<to name="NominalRoot">
+<to name="NominalRoot(NUMBER)">
 <with name="^DB+NOUN+ZERO" topos="NOUN">0</with>
 </to>
 <to name="NominalVerb1">
@@ -179,7 +179,7 @@
 <state name="OrdinalRoot" start="yes" end="yes" originalpos="NUM">
 </state>
 <state name="RealRoot" start="yes" end="yes" originalpos="NUM">
-    <to name="NominalRoot">
+    <to name="NominalRoot(NUMBER)">
         <with name="^DB+NOUN+ZERO" topos="NOUN">0</with>
     </to>
     <to name="NominalVerb1">
@@ -373,10 +373,8 @@
 <with>CA</with>
 </to>
 </state>
-
 <state name="NominalRoot" start="yes" end="no" originalpos="NOUN">
 <to name="NominalRoot">
-<with name="^DB+NOUN+NESS" topos="NOUN">lHk</with>
 <with name="A3SG+PNON+NOM^DB+NOUN+DIM" topos="NOUN">CHk</with>
 </to>
 <to name="Adverb">
@@ -393,9 +391,7 @@
 </to>
 <to name="Plural">
 <with name="A3SG">0</with>
-<with name="A3SG">'</with>
 <with name="A3PL">lAr</with>
-<with name="A3PL">'lAr</with>
 </to>
 <to name="Possessive3">
 <with name="A3SG+P3PL">lArH</with>
@@ -410,7 +406,41 @@
 <with>kü</with>
 </to>
 </state>
-
+<state name="NominalRoot(NUMBER)" start="yes" end="no" originalpos="NOUN">
+    <to name="NominalRoot">
+        <with name="A3SG+PNON+NOM^DB+NOUN+DIM" topos="NOUN">CHk</with>
+    </to>
+    <to name="Adverb">
+        <with name="A3SG+PNON+NOM^DB+ADV+SINCE" topos="ADVERB">DHr</with>
+        <with name="A3PL+PNON+NOM^DB+ADV+SINCE" topos="ADVERB">lArDHr</with>
+    </to>
+    <to name="Adjective">
+        <with name="^DB+ADJ+ALMOST" topos="ADJ">SH</with>
+        <with name="A3SG+PNON+NOM^DB+ADJ+AGT" topos="ADJ">CH</with>
+    </to>
+    <to name="VerbalRoot(F5PR)">
+        <with name="A3SG+PNON+NOM^DB+VERB+BECOME" topos="VERB">lAs</with>
+        <with name="A3SG+PNON+NOM^DB+VERB+ACQUIRE" topos="VERB">lAn</with>
+    </to>
+    <to name="Plural">
+        <with name="A3SG">0</with>
+        <with name="A3SG">'</with>
+        <with name="A3PL">lAr</with>
+        <with name="A3PL">'lAr</with>
+    </to>
+    <to name="Possessive3">
+        <with name="A3SG+P3PL">lArH</with>
+        <with name="A3SG+P3PL">lArH'</with>
+    </to>
+    <to name="Possesive3">
+        <with name="A3PL+P3PL">lArH</with>
+        <with name="PROP+A3PL+P3PL">lArH'</with>
+    </to>
+    <to name="Relative" transitionname="A3SG+PNON+NOM^DB+ADJ+REL" topos="ADJ">
+        <with>ki</with>
+        <with>kü</with>
+    </to>
+</state>
 <state name="NominalRoot(VERB-ADJ)" start="yes" end="no" originalpos="NOUN">
 <to name="Plural(VERB-ADJ)">
 <with name="A3SG">0</with>
@@ -630,7 +660,7 @@
 <to name="Possessive(ADJ)">
 <with name="PNON">0</with>
 </to>
-<to name="Possessive">
+<to name="Possessive">    
 <with name="P1SG">Hm</with>
 <with name="P2SG">Hn</with>
 <with name="P1PL">HmHz</with>
@@ -698,7 +728,7 @@
 <to name="Adjective">
 <with name="PNON+NOM^DB+ADJ+FITFOR" topos="NOUN">'lHk</with>
 </to>
-    <to name="Possessive3" transitionname="P3SG">
+<to name="Possessive3" transitionname="P3SG">
 <with>'sH</with>
 </to>
 </state>
@@ -732,13 +762,15 @@
 <with>'CA</with>
 </to>
 <to name="Case1">
-<with name="NOM">0</with>
 <with name="DAT">'yA</with>
 <with name="DAT">'nA</with>
 <with name="LOC">'DA</with>
 <with name="ABL">'DAn</with>
 <with name="GEN">'nHn</with>
 <with name="INS">'ylA</with>
+</to>
+<to name="Case1(PROP)">
+<with name="NOM">0</with>
 </to>
 <to name="Case2">
 <with name="LOC">'DA</with>
@@ -840,7 +872,7 @@
 <with name="LOC">DA</with>
 <with name="GEN">nHn</with>
 </to>
-</state>
+</state>    
 <state name="Possessive(FUTPART)" start="no" end="no">
 <to name="Adverb" transitionname="EQU">
 <with>CA</with>
@@ -938,6 +970,34 @@
 <with name="^DB+VERB+ZERO+PRES+COP" topos="VERB">DHr</with>
 </to>
 </state>
+<state name="Case1(PROP)" start="no" end="no">
+        <to name="Nominative">
+            <with>0</with>
+        </to>
+        <to name="Adjective">
+            <with name="^DB+ADJ+FITFOR" topos="ADJ">'lHk</with>
+        </to>
+        <to name="NominalVerb">
+            <with name="^DB+VERB+ZERO+PRES+A1SG" topos="VERB">'yHm</with>
+            <with name="^DB+VERB+ZERO+PRES+A2SG" topos="VERB">'SHn</with>
+            <with name="^DB+VERB+ZERO+PRES+A1PL" topos="VERB">'yHz</with>
+            <with name="^DB+VERB+ZERO+PRES+A2PL" topos="VERB">'SHnHz</with>
+            <with name="^DB+VERB+ZERO+PRES+A3PL" topos="VERB">'lAr</with>
+        </to>
+        <to name="NominalVerb1">
+            <with name="^DB+VERB+ZERO+PAST" topos="VERB">'yDH</with>
+            <with name="^DB+VERB+ZERO+COND" topos="VERB">'ysA</with>
+        </to>
+        <to name="NominalVerb2">
+            <with name="^DB+VERB+ZERO+NARR" topos="VERB">'ymHs</with>
+        </to>
+        <to name="TemporalAdverb">
+            <with name="^DB+VERB+ZERO^DB+ADV+WHILE" topos="ADVERB">'yken</with>
+        </to>
+        <to name="NominalVerb4">
+            <with name="^DB+VERB+ZERO+PRES+COP" topos="VERB">'DHr</with>
+        </to>
+</state>
 <state name="Case1(VERB-ADJ)" start="no" end="no">
 <to name="Nominative">
 <with>0</with>
@@ -955,7 +1015,7 @@
 <state name="NominalVerb" start="no" end="yes">
 <to name="OtherVerb">
 <with name="COP">DHr</with>
-</to>
+</to>    
 </state>
 <state name="TemporalAdverb" start="no" end="yes">
 </state>
@@ -1192,7 +1252,7 @@
 </to>
 <to name="PassiveHn">
 <with>0</with>
-<with name="REFLEX">Hn</with>
+<with name="REFLEX">Hn</with>    
 </to>
 <to name="CausativeDHr" transitionname="^DB+VERB+CAUS" topos="VERB">
 <with>DHr</with>
@@ -1257,7 +1317,7 @@
 </to>
 <to name="PassiveHn">
 <with>0</with>
-<with name="REFLEX">Hn</with>
+<with name="REFLEX">Hn</with>    
 </to>
 <to name="Causativet" transitionname="^DB+VERB+CAUS" topos="VERB">
 <with>t</with>
@@ -1431,7 +1491,7 @@
 </to>
 <to name="PassiveHn">
 <with>0</with>
-</to>
+</to>    
 </state>
 <state name="CausativeHt" start="no" end="no">
 <to name="CausativeDHr" transitionname="^DB+VERB+CAUS" topos="VERB">
@@ -1530,7 +1590,7 @@
 <with>0</with>
 <with name="^DB+VERB+ABLE" topos="VERB">yAbil</with>
 </to>
-</state>
+</state> 
 <state name="NegativeAorist" start="no" end="no">
 <to name="SecondTensePerfectConditional">
 <with name="PAST">yDH</with>
@@ -1541,7 +1601,7 @@
 </to>
 <to name="TemporalAdverb">
 <with name="^DB+ADV+WHILE" topos="ADVERB">yken</with>
-</to>
+</to>    
 </state>
 <state name="NegAorist" start="no" end="yes">
 </state>
@@ -1635,7 +1695,7 @@
 <with name="P3SG">sH</with>
 <with name="P1PL">HmHz</with>
 <with name="P2PL">HnHz</with>
-<with name="P3PL">lArH</with>
+<with name="P3PL">lArH</with>    
 </to>
 </state>
 <state name="Adverb1" start="no" end="no">
