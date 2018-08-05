@@ -2,7 +2,10 @@
 
 import Corpus.Sentence;
 import Corpus.TurkishSplitter;
-
+import Deasciifier.Deasciifier;
+import Deasciifier.NGramDeasciifier;
+import Deasciifier.SimpleAsciifier;
+import Deasciifier.SimpleDeasciifier;
 import Dictionary.TurkishWordComparator;
 import Dictionary.TxtDictionary;
 import Dictionary.Word;
@@ -10,10 +13,10 @@ import MorphologicalAnalysis.FsmMorphologicalAnalyzer;
 import MorphologicalAnalysis.FsmParse;
 import MorphologicalAnalysis.FsmParseList;
 import MorphologicalDisambiguation.MorphologicalDisambiguator;
-import MorphologicalDisambiguation.RootFirstDisambiguation;
 import Ngram.NGram;
-
 import Service.MAService;
+import SpellChecker.NGramSpellChecker;
+import SpellChecker.SimpleSpellChecker;
 import Syllibification.IrregularWordException;
 import Syllibification.SyllableList;
 import Wrappers.Dilbaz.DilbazWrapper;
@@ -22,10 +25,7 @@ import Wrappers.ITU.ITUWebWrapper;
 import Wrappers.TRMorph.TRMorphWrapper;
 import Wrappers.WordAnalysis;
 import Wrappers.Zemberek.ZemberekWrapper;
-import com.sun.xml.internal.txw2.NamespaceResolver;
 import nlptoolkit.ui.nlp.DeascifierTypes;
-//import nlptoolkit.ui.nlp.TurkishSyllabification;
-//import nlptoolkit.ui.services.dto.DisambiguatedAnalysisDTO;
 import nlptoolkit.ui.services.wrappers.MyRootFirstDisambiguation;
 
 import java.io.FileInputStream;
@@ -34,11 +34,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import SpellChecker.*;
-import Deasciifier.*;
-
-import static nlptoolkit.ui.services.ExternalMorphologicalAnalyzerTypes.Dilbaz;
 
  public class NLPService {
 
