@@ -28,7 +28,7 @@ public class MAWrapperView extends NLPView {
 
         //MATypes.
         ComboBox cmbMATypes = new ComboBox();
-        cmbMATypes.setItems("TRMorph","ITU-NLP","Zemberek");
+        cmbMATypes.setItems("TRMorph","ITUWeb","Zemberek");     //TODO: Do not respublish ITUWeb due to the licensing restrictions!
         cmbMATypes.setValue("TRMorph");
         cmbMATypes.setEmptySelectionAllowed(false);
         cmbMATypes.setTextInputAllowed(false);

@@ -13,8 +13,15 @@ import MorphologicalDisambiguation.MorphologicalDisambiguator;
 import MorphologicalDisambiguation.RootFirstDisambiguation;
 import Ngram.NGram;
 
+import Service.MAService;
 import Syllibification.IrregularWordException;
 import Syllibification.SyllableList;
+import Wrappers.IExternalMorphologicalAnalyzer;
+import Wrappers.ITU.ITUWebWrapper;
+import Wrappers.TRMorph.TRMorphWrapper;
+import Wrappers.WordAnalysis;
+import Wrappers.Zemberek.ZemberekWrapper;
+import com.sun.xml.internal.txw2.NamespaceResolver;
 import nlptoolkit.ui.nlp.DeascifierTypes;
 //import nlptoolkit.ui.nlp.TurkishSyllabification;
 //import nlptoolkit.ui.services.dto.DisambiguatedAnalysisDTO;
@@ -143,6 +150,24 @@ import Deasciifier.*;
          FsmParseList[] words = analyzer.morphologicalAnalysis(sentence, false);
          ArrayList<FsmParse> result = disambiguator.disambiguate(words);
          return result;
+     }
+
+     public WordAnalysis MorphologicallyAnalyzeExternally(String word, ExternalMorphologicalAnalyzerTypes maType){      //TODO: Manage folders, dependencies etc here.. pass analyzer enum.
+         MAService maService = new MAService();
+         IExternalMorphologicalAnalyzer analyzer = CreateExternalMorphologicalAnalyzer(maType);
+         return maService.AnalyzeWord(word,analyzer);
+     }
+     protected IExternalMorphologicalAnalyzer CreateExternalMorphologicalAnalyzer(ExternalMorphologicalAnalyzerTypes type){
+         switch (type){
+             case TRMorph:
+                 return new TRMorphWrapper("C:\\PROJECTS\\MLPractices\\Projects\\TRmorph","WinLauncher.bat");
+             case Zemberek:
+                 return new ZemberekWrapper();
+             case ITUWeb:
+                 return new ITUWebWrapper();
+             default:
+                 throw new RuntimeException("No such MA!");
+         }
      }
 
      //TODO: İki kere çalıştırmadan, disambiguated correct path'i analysis üzerinden işaretleyerek döndüreceğiz. clone doğru çalışmıyor.
