@@ -4,6 +4,7 @@ import Corpus.Sentence;
 import MorphologicalAnalysis.FsmParse;
 import MorphologicalAnalysis.FsmParseList;
 import com.sun.javafx.embed.HostInterface;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.sass.internal.parser.ParseException;
 import com.vaadin.ui.*;
 import nlptoolkit.ui.services.NLPService;
@@ -50,6 +51,7 @@ public class MorphologicalAnalyzerDisambiguatorView extends NLPView {
                 DrawWordParses(word,null);
             }
         });
+        btnAnalyze.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
         //Incomplete!
 //        btnDisambiguate.addClickListener(e -> {

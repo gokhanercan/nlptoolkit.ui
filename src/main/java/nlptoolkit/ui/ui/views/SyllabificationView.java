@@ -1,6 +1,7 @@
 package nlptoolkit.ui.ui.views;
 
 import Syllibification.IrregularWordException;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextArea;
@@ -27,6 +28,7 @@ public class SyllabificationView extends NLPView {
         txtOutput.setSizeFull();
         txtOutput.setRows(20);
         Button btn = new Button("Syllabify");
+        btn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         row1.addComponents(txtInput,txtOutput);
         layout.addComponent(row1);
         layout.addComponents(btn);

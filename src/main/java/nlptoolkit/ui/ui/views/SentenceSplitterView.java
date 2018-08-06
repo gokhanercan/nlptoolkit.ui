@@ -1,6 +1,7 @@
 package nlptoolkit.ui.ui.views;
 
 import Corpus.Sentence;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import nlptoolkit.ui.services.NLPService;
 
@@ -39,6 +40,7 @@ public class SentenceSplitterView extends NLPView {
         txtOutput.setSizeFull();
         txtOutput.setRows(20);
         Button btn = new Button("Split");
+        btn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         //TextArea txtMessage = new TextArea();
         Label lblMessage = new Label();
         row1.addComponents(txtInput,txtOutput);

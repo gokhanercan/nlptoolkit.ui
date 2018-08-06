@@ -4,6 +4,7 @@ import Dictionary.Word;
 import Wrappers.IExternalMorphologicalAnalyzer;
 import Wrappers.WordAnalysis;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
@@ -39,6 +40,7 @@ public class MAWrapperView extends NLPView {
         txtInput.setSizeFull();
         txtInput.setResponsive(true);
         Button btnAnalyze = new Button("Analyze");
+        btnAnalyze.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         LblResult = new Label("", ContentMode.PREFORMATTED);
 
         //MATypes.

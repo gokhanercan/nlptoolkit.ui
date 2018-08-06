@@ -1,6 +1,7 @@
 package nlptoolkit.ui.ui.views;
 
 import Corpus.Sentence;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import nlptoolkit.ui.nlp.DeascifierTypes;
 import nlptoolkit.ui.services.NLPService;
@@ -28,6 +29,7 @@ public class AsciifierDeasciifierView extends NLPView {
         txtOutput.setRows(20);
 
         Button btnAsciify = new Button("Asciify");
+        btnAsciify.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         Button btnDeasciify = new Button("Deasciify");
         Button btnReset = new Button("Reset");
 

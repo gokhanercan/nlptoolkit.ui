@@ -1,6 +1,7 @@
 package nlptoolkit.ui.ui.views;
 
 import Corpus.Sentence;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextArea;
@@ -27,6 +28,7 @@ public class SpellCheckerView extends NLPView {
         txtOutput.setSizeFull();
         txtOutput.setRows(10);
         Button btn = new Button("SpellChecker");
+        btn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         Button btn2 = new Button("NGramSpellChecker");
 
         row1.addComponents(txtInput,txtOutput);
