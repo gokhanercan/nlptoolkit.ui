@@ -1,15 +1,18 @@
 package nlptoolkit.ui.ui.views;
 
 import Dictionary.Word;
+import Syntax.Markers.MorphologyHtmlMarker;
 import Wrappers.IExternalMorphologicalAnalyzer;
 import Wrappers.WordAnalysis;
 
+import com.google.common.collect.Sets;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import nlptoolkit.ui.services.ExternalMorphologicalAnalyzerTypes;
 import nlptoolkit.ui.services.NLPService;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -70,7 +73,6 @@ public class MAWrapperView extends NLPView {
                 LblResult.setValue(org.apache.commons.lang3.StringUtils.join(wordAnalysis.Results,"\n"));
                 Layout.addComponent(LblResult);
             }
-
         });
     }
 
@@ -92,7 +94,7 @@ public class MAWrapperView extends NLPView {
             String val = obj.toString();
             ExternalMorphologicalAnalyzerTypes maType = ExternalMorphologicalAnalyzerTypes.valueOf(val);
             Label header = new Label(val);
-            header.addStyleName("h3");
+            header.addStyleName("bold");
             grid.addComponent(header,maIndex,0);
             maIndex++;
         }
@@ -100,17 +102,34 @@ public class MAWrapperView extends NLPView {
         //items
         maIndex = 0;
         for (Object obj : ExternalMorphologicalAnalyzerTypes.values()) {
-            String val = obj.toString();
-            ExternalMorphologicalAnalyzerTypes maType = ExternalMorphologicalAnalyzerTypes.valueOf(val);
-            WordAnalysis analysis = nlpService.MorphologicallyAnalyzeExternally(word,maType);
-            String text = org.apache.commons.lang3.StringUtils.join(analysis.Results,"</br>");
-            Label lblText = new Label(text);
-            lblText.setContentMode(ContentMode.HTML);
-            grid.addComponent(lblText,maIndex,1);
-            maIndex++;
+            Label lblText = new Label();
+            try {
+                String val = obj.toString();
+                ExternalMorphologicalAnalyzerTypes maType = ExternalMorphologicalAnalyzerTypes.valueOf(val);
+                WordAnalysis analysis = nlpService.MorphologicallyAnalyzeExternally(word,maType);
+                String text = org.apache.commons.lang3.StringUtils.join(analysis.Results,"</br>");
+                if (StringUtils.isEmpty(text)) text = "N/A";
+                String markedText = MarkText(text);
+                lblText.setValue(markedText);
+                lblText.setContentMode(ContentMode.HTML);
+            }
+            catch (Exception ex){
+                lblText.setValue("Err");        //TODO: add err to tooltip.
+                lblText.addStyleName("error");
+
+            }
+            finally {
+                grid.addComponent(lblText,maIndex,1);
+                maIndex++;
+            }
         }
         addComponent(grid);
         Grid = grid;
+    }
+
+    protected String MarkText(String text){
+        MorphologyHtmlMarker marker = new MorphologyHtmlMarker("pos","span", Sets.newHashSet("verb","noun","adv","adj","pnoun"));
+        return marker.MarkMatchingMTags(text);
     }
 
     private void ClearAnalysis(){

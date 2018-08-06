@@ -1631,6 +1631,30 @@ div.v-layout.v-horizontal.v-widget {
 	vertical-align: top;
 }
 
+*.error {
+	color: Red;
+}
+
+*.success {
+	color: green;
+}
+
+*.warning {
+	color: orange;
+}
+
+div.bold {
+	font-weight: bold;
+}
+
+span.root {
+	font-weight: bold;
+}
+
+span.verb, span.noun, span.adj, span.adv, span.pnoun {
+	color: blue;
+}
+
 .mytheme.v-app, .mytheme.v-app-loading {
 	font: 300 16px/1.55 "Open Sans", sans-serif;
 	color: #464646;
