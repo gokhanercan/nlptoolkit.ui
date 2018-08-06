@@ -1,5 +1,5 @@
 package nlptoolkit.ui.services;
 
 public enum ExternalMorphologicalAnalyzerTypes {
-    Dilbaz, TRMorph, Zemberek, ITUWeb
+    Dilbaz, TRMorph, Zemberek, ITUWeb, SakOffline
 }

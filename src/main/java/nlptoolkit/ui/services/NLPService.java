@@ -22,9 +22,11 @@ import Syllibification.SyllableList;
 import Wrappers.Dilbaz.DilbazWrapper;
 import Wrappers.IExternalMorphologicalAnalyzer;
 import Wrappers.ITU.ITUWebWrapper;
+import Wrappers.Sak.SakOfflineWrapper;
 import Wrappers.TRMorph.TRMorphWrapper;
 import Wrappers.WordAnalysis;
 import Wrappers.Zemberek.ZemberekWrapper;
+import nlptoolkit.ui.application.AppContainer;
 import nlptoolkit.ui.nlp.DeascifierTypes;
 import nlptoolkit.ui.services.wrappers.MyRootFirstDisambiguation;
 
@@ -37,6 +39,9 @@ import java.util.Arrays;
 
  public class NLPService {
 
+    private AppContainer getContainer(){
+        return AppContainer.CreateInstance();
+    }
     private FSService _FSService = new FSService();
 
     private FsmMorphologicalAnalyzer _Analyzer = null;          //TODO: Make it singleton across screens. not only this instance. https://trello.com/c/epBpGk1R/38-make-shared-services-singleton-across-views
@@ -152,23 +157,8 @@ import java.util.Arrays;
 
      public WordAnalysis MorphologicallyAnalyzeExternally(String word, ExternalMorphologicalAnalyzerTypes maType){      //TODO: Manage folders, dependencies etc here.. pass analyzer enum.
          MAService maService = new MAService();
-         IExternalMorphologicalAnalyzer analyzer = CreateExternalMorphologicalAnalyzer(maType);
+         IExternalMorphologicalAnalyzer analyzer = getContainer().ResolveExternalMorphologicalAnalyzer(maType);
          return maService.AnalyzeWord(word,analyzer);
-     }
-     protected IExternalMorphologicalAnalyzer CreateExternalMorphologicalAnalyzer(ExternalMorphologicalAnalyzerTypes type){
-         switch (type){
-             case TRMorph:
-                 return new TRMorphWrapper("C:\\PROJECTS\\MLPractices\\Projects\\TRmorph","WinLauncher.bat");
-             case Zemberek:
-                 return new ZemberekWrapper();
-             case ITUWeb:
-                 return new ITUWebWrapper();
-             case Dilbaz:
-                 return new DilbazWrapper(getAnalyzer());
-
-             default:
-                 throw new RuntimeException("No such MA!");
-         }
      }
 
      //TODO: İki kere çalıştırmadan, disambiguated correct path'i analysis üzerinden işaretleyerek döndüreceğiz. clone doğru çalışmıyor.

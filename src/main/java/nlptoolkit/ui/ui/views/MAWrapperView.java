@@ -43,7 +43,7 @@ public class MAWrapperView extends NLPView {
 
         //MATypes.
         ComboBox cmbMATypes = new ComboBox();
-        cmbMATypes.setItems("-All-","Dilbaz","TRMorph","ITUWeb","Zemberek");     //TODO: Do not respublish ITUWeb due to the licensing restrictions!
+        cmbMATypes.setItems("-All-","Dilbaz","TRMorph","ITUWeb","Zemberek","SakOffline");     //TODO: Do not respublish ITUWeb due to the licensing restrictions!
         cmbMATypes.setValue("-All-");
         cmbMATypes.setEmptySelectionAllowed(false);
         cmbMATypes.setTextInputAllowed(false);
@@ -77,7 +77,7 @@ public class MAWrapperView extends NLPView {
         boolean isFirstRender = Grid == null;
         if(!isFirstRender) removeComponent(Grid);
 
-        GridLayout grid = new GridLayout(4,2);
+        GridLayout grid = new GridLayout(5,2);
         grid.setSpacing(false);
         grid.setMargin(false);
         grid.addStyleName("outlined");
