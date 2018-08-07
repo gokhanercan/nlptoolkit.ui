@@ -40,3 +40,4 @@ release.properties
 pom.xml.releaseBackup
 pom.xml.tag
 private/DeploymentNotes.txt
+src/main/webapp/Resources/Sak/BounFreqs-parsed1.txt
