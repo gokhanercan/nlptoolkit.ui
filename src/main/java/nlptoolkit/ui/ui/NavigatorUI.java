@@ -29,7 +29,7 @@ public class NavigatorUI extends UI {
         RegisterNLPView(new SyllabificationView());
         RegisterNLPView(new SentenceSplitterView());
         RegisterNLPView(new AsciifierDeasciifierView());
-        RegisterNLPView(new SpellCheckerView());
+        //RegisterNLPView(new SpellCheckerView());
 
         // Create a navigator to control the views
         _Navigator = new Navigator(this, this);
