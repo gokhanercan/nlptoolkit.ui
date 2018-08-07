@@ -56,6 +56,7 @@ public class AppContainer {
     protected IExternalMorphologicalAnalyzer CreateExternalMorphologicalAnalyzer(ExternalMorphologicalAnalyzerTypes type){
         switch (type){
             case TRMorph:
+                //TODO: Get from config.
                 return new TRMorphWrapper("C:\\PROJECTS\\MLPractices\\Projects\\TRmorph","WinLauncher.bat");
             case Zemberek:
                 return new ZemberekWrapper();
@@ -63,8 +64,8 @@ public class AppContainer {
                 return new ITUWebWrapper();
             case Dilbaz:
                 return new DilbazWrapper(getAnalyzer());
-            case SakOffline:
-                String filePath = _FSService.GetResourceFilesRootPath() + "\\Sak\\BounMini-parsed.txt";
+            case SakOffline:    //TODO: Get these information from web.inf file.
+                String filePath = _FSService.GetResourceFilesRootPath() + "\\Sak\\BounFreqs-parsed1.txt";
                 return new SakOfflineWrapper(filePath);
             default:
                 throw new RuntimeException("No such MA!");
