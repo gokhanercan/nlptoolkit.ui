@@ -7,7 +7,7 @@
 
     <context-param>
         <param-name>SakOfflineFilePath</param-name>
-        <param-value>\\Sak\\BounFreqs-parsed1.txt</param-value>
+        <param-value>\\Sak\\BounFreqs-parsed-single.txt</param-value>
     </context-param>
 
     <context-param>
