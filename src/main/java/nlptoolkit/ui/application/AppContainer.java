@@ -9,13 +9,24 @@ import Wrappers.ITU.ITUWebWrapper;
 import Wrappers.Sak.SakOfflineWrapper;
 import Wrappers.TRMorph.TRMorphWrapper;
 import Wrappers.Zemberek.ZemberekWrapper;
+import com.vaadin.server.VaadinServlet;
 import nlptoolkit.ui.services.ExternalMorphologicalAnalyzerTypes;
 import nlptoolkit.ui.services.FSService;
 
+import javax.servlet.ServletContext;
 import java.util.Hashtable;
 
 /*TODO:Build with a real IOC container.*/
 public class AppContainer {
+
+    private VaadinServlet _Servlet = null;
+    public VaadinServlet getServlet(){
+        if (_Servlet == null) _Servlet = VaadinServlet.getCurrent();
+        return _Servlet;
+    }
+    public ServletContext getContext(){
+        return getServlet().getServletContext();
+    }
 
     private static AppContainer _AppContainer = null;
     public static AppContainer CreateInstance(){
@@ -56,16 +67,15 @@ public class AppContainer {
     protected IExternalMorphologicalAnalyzer CreateExternalMorphologicalAnalyzer(ExternalMorphologicalAnalyzerTypes type){
         switch (type){
             case TRMorph:
-                //TODO: Get from config.
-                return new TRMorphWrapper("C:\\PROJECTS\\MLPractices\\Projects\\TRmorph","WinLauncher.bat");
+                return new TRMorphWrapper(getContext().getInitParameter("TRMorphRootFolder") ,getContext().getInitParameter("TRMorphLauncherFileName"));
             case Zemberek:
                 return new ZemberekWrapper();
             case ITUWeb:
                 return new ITUWebWrapper();
             case Dilbaz:
                 return new DilbazWrapper(getAnalyzer());
-            case SakOffline:    //TODO: Get these information from web.inf file.
-                String filePath = _FSService.GetResourceFilesRootPath() + "\\Sak\\BounFreqs-parsed1.txt";
+            case SakOffline:
+                String filePath = _FSService.GetResourceFilesRootPath() + getContext().getInitParameter("SakOfflineFilePath");
                 return new SakOfflineWrapper(filePath);
             default:
                 throw new RuntimeException("No such MA!");
