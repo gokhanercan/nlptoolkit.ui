@@ -1,13 +1,11 @@
 1) Checkout to Repository
 
-Setup an SVN client:
-- SVN için Intellij içinde Settings->Plugins "Subversion Integration" ile IntelliJ içerisinden entegre edilebilir.
-- Filesystem client: https://tortoisesvn.net/downloads.html
+Install a Git client:
 
 Project repo:
-repo url:         https://gokhanercan.com:8443/svn/MLPractices/trunk/Projects/nlptoolkit.ui
-Ask gokhan for auth infos.
-SVN ile repo'yu checkout edeceksin. (git dilinde clone)
+repo url:         https://github.com/gokhanercan/nlptoolkit.ui
+Ask gokhan for authentication infos / or you can fork and send pull requests.
+Git ile repo'yu clone edeceksin.
 
 2) Intellij
 Bu kodu intellij'de project import ya da open ile açabilirsin.
@@ -21,7 +19,8 @@ https://www.jetbrains.com/help/idea/getting-started-with-vaadin-maven-project.ht
 Maven önce birşeyler download edecek projeye şaşırma. pom.xml dosyasında bağımlılıkları download ediyor. "Make" de tetiklemek için.
 
 4) Ref nlptoolkit:
-Nlp framework'ümüz alt klasörde derlenmiş jar halinde https://gokhanercan.com:8443/svn/MLPractices/trunk/Projects/nlptoolkit.ui/src/main/webapp/WEB-INF/lib/
+Nlp framework'ümüz alt klasörde derlenmiş jar halinde https://github.com/gokhanercan/nlptoolkit.ui/tree/master/src/main/webapp/WEB-INF/lib
+Kullandığın editöre göre bu klasörü classpath olarak vermen gerekebilir. Ya da maven'ına dependency eklemen gerekebilir. İdeali bu lokal refernasları tamamen maven'dan alacak şekilde ayarlamak.
 F7 ile Make dediğinde herşey derleniyorsa işler yolunda demektir.
 
 5) Running/Debugging Project:
@@ -43,5 +42,6 @@ Geliştirme bitti ise projeyi yayına atmak için aşağıdaki adımları uygula
 
 
 Son güncelleme:
+Gökhan, 08.12.2018
 Gökhan, 22.02.2018
 Gökhan, 24.12.2017
