@@ -5,7 +5,8 @@ import com.vaadin.annotations.DesignRoot;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.*;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
 
 @DesignRoot
 public class MainView extends NLPView {
@@ -20,6 +21,7 @@ public class MainView extends NLPView {
     // Menu navigation button listener
     class ButtonListener implements Button.ClickListener {
         String menuitem;
+
         public ButtonListener(String menuitem) {
             this.menuitem = menuitem;
         }
@@ -40,9 +42,16 @@ public class MainView extends NLPView {
 
         //Building nlpview menus
         MenuBar topMenu = new MenuBar();
-        topMenu.addItem("Home", (MenuBar.Command) menuItem -> { ShowHomeContent(); });
-        for (Map.Entry<String, NLPView> pair : NavigatorUI.NLPViews.entrySet()) {
-            topMenu.addItem(pair.getKey(), (MenuBar.Command) menuItem -> { GotoView(pair.getKey()); });
+        topMenu.addItem("Home", (MenuBar.Command) menuItem -> {
+            ShowHomeContent();
+        });
+        ArrayList<String> sorted_items = Collections.list(NavigatorUI.NLPViews.keys());
+        Collections.sort(sorted_items);
+//        for (Map.Entry<String, NLPView> pair : sorted_pairs) {
+        for (String key : sorted_items) {
+            topMenu.addItem(key, (MenuBar.Command) menuItem -> {
+                GotoView(key);
+            });
         }
 
         //add
@@ -50,16 +59,17 @@ public class MainView extends NLPView {
         addComponent(MainPanel);        //todo: rename.
     }
 
-    public void ShowHomeContent(){
+    public void ShowHomeContent() {
         Label lbl = new Label("Homepage content here...");
         this.MainPanel.setContent(lbl);
     }
 
-    public void GotoView(String viewName){
+    public void GotoView(String viewName) {
         NLPView view = this.NavigatorUI.NLPViews.get(viewName);
         GotoView(view);
     }
-    public void GotoView(NLPView view){
+
+    public void GotoView(NLPView view) {
         this.MainPanel.setContent(view);
     }
 

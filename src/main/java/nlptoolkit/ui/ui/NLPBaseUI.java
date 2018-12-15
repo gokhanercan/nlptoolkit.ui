@@ -1,6 +1,5 @@
 package nlptoolkit.ui.ui;
 
-import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
