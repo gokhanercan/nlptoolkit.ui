@@ -2,10 +2,23 @@ package nlptoolkit.ui.ui.views;
 
 import Corpus.Sentence;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.VerticalLayout;
 import nlptoolkit.ui.services.NLPService;
 
+import static nlptoolkit.ui.ui.views.Utils.NEWLINE_SEPARATOR;
+import static nlptoolkit.ui.ui.views.Utils.bindButtonToFile;
+
 public class SpellCheckerView extends NLPView {
+
+    private final String INITIAL_SENTENCES = "İstanbül'da lokilde gezdik." +
+            "\nİstanbül'da lokilde gezmedik.";
+    private final String WORD_SEPARATOR = "|";
+    private final String MAPPING_SEPARATOR = "|";
+    private final String DOWNLOAD_FILENAME = "spellCheckerResults.txt";
+    private String fileContent = "";
 
     @Override
     public String GetScreenName() {
@@ -14,55 +27,39 @@ public class SpellCheckerView extends NLPView {
 
     public SpellCheckerView() {
 
-        //Layout
         final VerticalLayout wrapperLayout = new VerticalLayout();
         final HorizontalLayout row1 = new HorizontalLayout();
         row1.setSizeFull();
-        TextArea txtInput = new TextArea("Write Sentence For SpellChecker:", "İstanbül'da lokilde gezdik." +
-                "\nİstanbül'da lokilde gezmedik.");
+        TextArea txtInput = new TextArea("Write Sentence For SpellChecker:", INITIAL_SENTENCES);
         txtInput.setRows(10);
         txtInput.setSizeFull();
         TextArea txtOutput = new TextArea("Output for SpellChecker");
         txtOutput.setSizeFull();
         txtOutput.setRows(10);
+        row1.addComponents(txtInput, txtOutput);
+
         Button btn1 = new Button("SpellChecker");
         btn1.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         Button btn2 = new Button("NGramSpellChecker");
-
-        row1.addComponents(txtInput, txtOutput);
+        Button downloadButton = new Button("Download Results");
         HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.addComponents(btn1, btn2);
+        buttonLayout.addComponents(btn1, btn2, downloadButton);
 
-        TextField correspondence = new TextField("Copy mapping from here. Each word pair is separated by space. " +
-                "Word pairs are matched by <=> and sentences are separated by |");
-        correspondence.setSizeFull();
-        wrapperLayout.addComponents(row1, buttonLayout, correspondence);
+        wrapperLayout.addComponents(row1, buttonLayout);
         btn1.addClickListener(e -> {
-            spellCheck(txtInput, txtOutput, correspondence, false);
+            spellCheck(txtInput, txtOutput, false);
+            bindButtonToFile(downloadButton, DOWNLOAD_FILENAME, fileContent);
         });
         btn2.addClickListener(e -> {
-                    spellCheck(txtInput, txtOutput, correspondence, true);
-//                    txtOutput.clear();
-//                    Sentence mysentence = new Sentence(txtInput.getValue());
-//                    Sentence ascisentence = nlpService.NGramSpellChecker(mysentence);
-//                    String correctSentence = sentencetoString(ascisentence);
-//                    txtOutput.setValue(txtOutput.getValue() + correctSentence);
+            spellCheck(txtInput, txtOutput, true);
+            bindButtonToFile(downloadButton, DOWNLOAD_FILENAME, fileContent);
                 }
         );
 
         addComponent(wrapperLayout);
     }
 
-    private String sentencetoString(Sentence sentence) {
-        String result = "";
-        for (int i = 0; i < sentence.wordCount(); i++) {
-            result += sentence.getWord(i);
-            result += " ";
-        }
-        return result;
-    }
-
-    private void spellCheck(TextArea txtInput, TextArea txtOutput, TextField correspondence, boolean useNgram) {
+    private void spellCheck(TextArea txtInput, TextArea txtOutput, boolean useNgram) {
         NLPService nlpService = new NLPService();
         txtOutput.clear();
         String[] inputLines = txtInput.getValue().split("\n");
@@ -70,13 +67,13 @@ public class SpellCheckerView extends NLPView {
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < inputLines.length; i += 1) {
             Sentence input = new Sentence(inputLines[i]);
-            Sentence corrected = null;
+            Sentence corrected;
             if (useNgram) {
                 corrected = nlpService.NGramSpellChecker(input);
             } else {
                 corrected = nlpService.SpellChecker(input);
             }
-            output.append(corrected.toString() + "\n");
+            output.append(corrected.toString()).append("\n");
             outputLines[i] = corrected.toString();
         }
         txtOutput.setValue(output.toString());
@@ -92,14 +89,14 @@ public class SpellCheckerView extends NLPView {
                     String inputWord = inputWords[j];
                     String outputWord = outputWords[j];
                     String[] alignments = getAlignment(inputWord, outputWord);
-                    valueToCopy.append(inputWord + "<=>" + outputWord + " ");
+                    valueToCopy.append(alignments[0]).append(MAPPING_SEPARATOR).append(alignments[1]).append(WORD_SEPARATOR);
                 }
-                valueToCopy.append("|");
+                valueToCopy.append(NEWLINE_SEPARATOR);
             } else {
                 valueToCopy.append("Different IO length! Couldn't align.");
             }
         }
-        correspondence.setValue(valueToCopy.toString());
+        fileContent = valueToCopy.toString();
     }
 
     private String[] getAlignment(String word1, String word2) {
