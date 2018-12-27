@@ -2,7 +2,10 @@ package nlptoolkit.ui.ui.views;
 
 import Corpus.Sentence;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.VerticalLayout;
 import nlptoolkit.ui.services.NLPService;
 
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ public class SentenceSplitterView extends NLPView {
 
     @Override
     public String GetScreenName() {
-        return "Sentence Splitter";
+        return "Tokenizer/Sentence Splitter";
     }
 
     public SentenceSplitterView() {
@@ -20,7 +23,7 @@ public class SentenceSplitterView extends NLPView {
         final VerticalLayout layout = new VerticalLayout();
         final HorizontalLayout row1 = new HorizontalLayout();
         row1.setSizeFull();
-        TextArea txtInput = new TextArea("SentenceSplitter: Please enter any piece of text","Öğrencilerin ana dillerini okuma, yazma, anlama ve " +
+        TextArea txtInput = new TextArea("Enter any piece of text to tokenize/split to sentences", "Öğrencilerin ana dillerini okuma, yazma, anlama ve " +
                 "yorumlama yeteneklerinin tespit edilmesi, eğitim sisteminin " +
                 "hemen her aşamasında birincil ölçme ve seçme yöntemi olarak " +
                 "kullanılmaktadır. Ülkemizde de ilköğretimden, yüksek lisans " +
@@ -34,21 +37,17 @@ public class SentenceSplitterView extends NLPView {
                 "zorluk seviyelerinde sınavlara giren öğrencilerin bu soruları " +
                 "çözme başarıları ile modelleri karşılaştırabilme imkanının " +
                 "sağlanması hedeflenmiştir.");
-        txtInput.setRows(20);
+        txtInput.setRows(15);
         txtInput.setSizeFull();
-        TextArea txtOutput = new TextArea("SentenceSplitter Output:");
+        TextArea txtOutput = new TextArea("Space and new line separated Tokens/Sentences:");
         txtOutput.setSizeFull();
-        txtOutput.setRows(20);
-        Button btn = new Button("Split");
+        txtOutput.setRows(15);
+        Button btn = new Button("Tokenize/Split");
         btn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        //TextArea txtMessage = new TextArea();
-        Label lblMessage = new Label();
         row1.addComponents(txtInput,txtOutput);
         layout.addComponent(row1);
         layout.addComponents(btn);
-        layout.addComponents(lblMessage);
 
-        //Action
         NLPService nlpService = new NLPService();
         btn.addClickListener(e -> {
             txtOutput.clear();
@@ -57,7 +56,7 @@ public class SentenceSplitterView extends NLPView {
             for (Sentence ss : splittedSentences) {
                 txtOutput.setValue(txtOutput.getValue() + ss + "\n\n");
             }
-            lblMessage.setValue("Input text splitted into " + splittedSentences.size() + " sentences.");
+            //lblMessage.setValue("Input text splitted into " + splittedSentences.size() + " sentences.");
         });
 
         addComponent(layout);
