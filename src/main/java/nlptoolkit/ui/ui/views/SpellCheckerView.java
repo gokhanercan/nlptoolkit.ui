@@ -11,16 +11,11 @@ import nlptoolkit.ui.services.NLPService;
 
 import java.util.ArrayList;
 
-import static nlptoolkit.ui.ui.views.Utils.NEWLINE_SEPARATOR;
+import static nlptoolkit.ui.ui.views.Configs.*;
 import static nlptoolkit.ui.ui.views.Utils.bindButtonToFile;
 
 public class SpellCheckerView extends NLPView {
 
-    private final String INITIAL_SENTENCES = "İstanbül'da lokilde gezdik." +
-            "\nİstanbül'da lokilde gezmedik.";
-    private final String WORD_SEPARATOR = "|";
-    private final String MAPPING_SEPARATOR = "=>";
-    private final String DOWNLOAD_FILENAME = "spellCheckerResults.txt";
     private String fileContent = "";
 
     @Override
@@ -33,7 +28,7 @@ public class SpellCheckerView extends NLPView {
         final VerticalLayout wrapperLayout = new VerticalLayout();
         final HorizontalLayout row1 = new HorizontalLayout();
         row1.setSizeFull();
-        TextArea txtInput = new TextArea("Write Sentence For SpellChecker:", INITIAL_SENTENCES);
+        TextArea txtInput = new TextArea("Write Sentence For SpellChecker:", Configs.SPELL_CHECKER_INITIAL_TEXT);
         txtInput.setRows(10);
         txtInput.setSizeFull();
         TextArea txtOutput = new TextArea("Output for SpellChecker");
@@ -51,11 +46,11 @@ public class SpellCheckerView extends NLPView {
         wrapperLayout.addComponents(row1, buttonLayout);
         btn1.addClickListener(e -> {
             spellCheck(txtInput, txtOutput, false);
-            bindButtonToFile(downloadButton, DOWNLOAD_FILENAME, fileContent);
+            bindButtonToFile(downloadButton, Configs.SPELL_CHECKER_DOWNLOAD_FILENAME, fileContent);
         });
         btn2.addClickListener(e -> {
             spellCheck(txtInput, txtOutput, true);
-            bindButtonToFile(downloadButton, DOWNLOAD_FILENAME, fileContent);
+            bindButtonToFile(downloadButton, Configs.SPELL_CHECKER_DOWNLOAD_FILENAME, fileContent);
                 }
         );
 
@@ -66,7 +61,9 @@ public class SpellCheckerView extends NLPView {
         NLPService nlpService = new NLPService();
         txtOutput.clear();
 
-        ArrayList<Sentence> inputSentences = nlpService.TurkishSplitter(txtInput.getValue().replace("\n", " ").trim());
+        String input = txtInput.getValue().replace("\n", " ").trim();
+        input = input.substring(0, Math.min(Configs.SPELL_CHECKER_CHAR_LIMIT, input.length()));
+        ArrayList<Sentence> inputSentences = nlpService.TurkishSplitter(input);
         StringBuilder downloadString = new StringBuilder();
         StringBuilder outputToShow = new StringBuilder();
         for (Sentence inputSentence : inputSentences) {

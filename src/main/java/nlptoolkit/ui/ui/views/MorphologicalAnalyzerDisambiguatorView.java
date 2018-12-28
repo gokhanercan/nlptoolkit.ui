@@ -8,15 +8,11 @@ import nlptoolkit.ui.services.NLPService;
 
 import java.util.ArrayList;
 
-import static nlptoolkit.ui.ui.views.Utils.NEWLINE_SEPARATOR;
+import static nlptoolkit.ui.ui.views.Configs.NEWLINE_SEPARATOR;
 import static nlptoolkit.ui.ui.views.Utils.bindButtonToFile;
 
 
 public class MorphologicalAnalyzerDisambiguatorView extends NLPView {
-    private String INITIAL_SENTENCES = "Gözlükçü dükkanına gittim .";
-    private final String DOWNLOAD_FILENAME = "morphologicalAnalysisResults.txt";
-    private final String SEPARATOR = "|";
-    private final int CHAR_LIMIT = 1000;
 
     @Override
     public String GetScreenName() {
@@ -30,7 +26,7 @@ public class MorphologicalAnalyzerDisambiguatorView extends NLPView {
         console.setSizeFull();
         console.setResponsive(true);
         TextArea txtInput = new TextArea("Type one sentence to morphologically analyze up to " +
-                CHAR_LIMIT + " characters:", INITIAL_SENTENCES);
+                Configs.MAD_CHAR_LIMIT + " characters:", Configs.MAD_INITIAL_TEXT);
         txtInput.setSizeFull();
         txtInput.setResponsive(true);
         txtInput.setRows(5);
@@ -52,7 +48,7 @@ public class MorphologicalAnalyzerDisambiguatorView extends NLPView {
         btnAnalyze.addClickListener(e -> {
             resultsGrid.removeAllColumns();
             String input = txtInput.getValue().replace("\n", " ");
-            input = input.substring(0, Math.min(CHAR_LIMIT, input.length()));
+            input = input.substring(0, Math.min(Configs.MAD_CHAR_LIMIT, input.length()));
             Sentence s = nlpService.TurkishSplitter(input).get(0);
             ArrayList<DisambiguationResult> results = nlpService.analyzeAndDisambiguate(s);
             resultsGrid.setItems(results);
@@ -70,7 +66,7 @@ public class MorphologicalAnalyzerDisambiguatorView extends NLPView {
 
             StringBuilder fileContent = new StringBuilder();
             for (DisambiguationResult result : results) {
-                fileContent.append(result.getWord()).append(SEPARATOR).append(result.getAnalysis()).append(SEPARATOR);
+                fileContent.append(result.getWord()).append(Configs.WORD_SEPARATOR).append(result.getAnalysis()).append(Configs.WORD_SEPARATOR);
                 if (result.isDisambiguatedAnalysis()) {
                     fileContent.append("+");
                 } else {
@@ -78,7 +74,7 @@ public class MorphologicalAnalyzerDisambiguatorView extends NLPView {
                 }
                 fileContent.append(NEWLINE_SEPARATOR);
             }
-            bindButtonToFile(downloadButton, DOWNLOAD_FILENAME, fileContent.toString());
+            bindButtonToFile(downloadButton, Configs.MAD_DOWNLOAD_FILENAME, fileContent.toString());
         });
         btnAnalyze.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 

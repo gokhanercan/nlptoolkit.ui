@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Utils {
-    static final String NEWLINE_SEPARATOR = System.getProperty("line.separator");
 
     private static HashMap<Button, FileDownloader> lastDownloaders = new HashMap<>();
 

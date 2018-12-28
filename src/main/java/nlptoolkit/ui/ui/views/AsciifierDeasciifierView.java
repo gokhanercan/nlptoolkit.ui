@@ -9,16 +9,11 @@ import nlptoolkit.ui.services.NLPService;
 
 import java.util.ArrayList;
 
-import static nlptoolkit.ui.ui.views.Utils.NEWLINE_SEPARATOR;
+import static nlptoolkit.ui.ui.views.Configs.*;
 import static nlptoolkit.ui.ui.views.Utils.bindButtonToFile;
 
 public class AsciifierDeasciifierView extends NLPView {
 
-    private final String INITIAL_INPUTS = "öğretmen\nşaşırmak\nIstanbul\nİstanbul\nitiraz\nüzüm\n";
-    private final String DOWNLOAD_FILENAME = "asciifierResults.txt";
-    private final String WORD_SEPARATOR = "|";
-    private final int CHAR_LIMIT = 10000;
-    private final String MAPPING_SEPARATOR = "=>";
 
     @Override
     public String GetScreenName() {
@@ -33,7 +28,7 @@ public class AsciifierDeasciifierView extends NLPView {
         final VerticalLayout inputArea = new VerticalLayout();
         textAreas.setSizeFull();
         TextArea txtInput = new TextArea("Please type words/sentences to asciify up to " +
-                CHAR_LIMIT + " characters:", INITIAL_INPUTS);
+                Configs.ASCIIFIER_CHAR_LIMIT + " characters:", Configs.ASCIIFIER_INITIAL_TEXT);
         txtInput.setRows(10);
         txtInput.setSizeFull();
 
@@ -43,7 +38,7 @@ public class AsciifierDeasciifierView extends NLPView {
 
         final VerticalLayout outputArea = new VerticalLayout();
         TextArea txtOutput = new TextArea("Asciified results/inputs for words/sentences up to " +
-                CHAR_LIMIT + " chracters:");
+                Configs.ASCIIFIER_CHAR_LIMIT + " chracters:");
         txtOutput.setSizeFull();
         txtOutput.setRows(10);
 
@@ -75,7 +70,7 @@ public class AsciifierDeasciifierView extends NLPView {
         btnAsciify.addClickListener(e -> {
             txtOutput.clear();
             String input = txtInput.getValue().replace("\n", " ").trim();
-            input = input.substring(0, Math.min(CHAR_LIMIT, input.length()));
+            input = input.substring(0, Math.min(Configs.ASCIIFIER_CHAR_LIMIT, input.length()));
             ArrayList<Sentence> inputSentences = nlpService.TurkishSplitter(input);
             StringBuilder downloadString = new StringBuilder();
             StringBuilder outputToShow = new StringBuilder();
@@ -89,7 +84,7 @@ public class AsciifierDeasciifierView extends NLPView {
                 downloadString.append(NEWLINE_SEPARATOR);
             }
             txtOutput.setValue(outputToShow.toString());
-            bindButtonToFile(downloadButton, DOWNLOAD_FILENAME, downloadString.toString());
+            bindButtonToFile(downloadButton, Configs.ASCIIFIER_DOWNLOAD_FILENAME, downloadString.toString());
         });
         btnDeasciify.addClickListener(e -> {
             txtInput.clear();
@@ -100,7 +95,7 @@ public class AsciifierDeasciifierView extends NLPView {
                 type = DeascifierTypes.Ngram;
             }
             String input = txtOutput.getValue().replace("\n", " ").trim();
-            input = input.substring(0, Math.min(CHAR_LIMIT, input.length()));
+            input = input.substring(0, Math.min(Configs.ASCIIFIER_CHAR_LIMIT, input.length()));
             ArrayList<Sentence> inputSentences = nlpService.TurkishSplitter(input);
             StringBuilder downloadString = new StringBuilder();
             StringBuilder outputToShow = new StringBuilder();
@@ -114,12 +109,12 @@ public class AsciifierDeasciifierView extends NLPView {
                 downloadString.append(NEWLINE_SEPARATOR);
             }
             txtInput.setValue(outputToShow.toString());
-            bindButtonToFile(downloadButton, DOWNLOAD_FILENAME, downloadString.toString());
+            bindButtonToFile(downloadButton, Configs.ASCIIFIER_DOWNLOAD_FILENAME, downloadString.toString());
         });
         btnReset.addClickListener(e -> {
             txtOutput.clear();
 //            txtMappings.clear();
-            txtInput.setValue(INITIAL_INPUTS);
+            txtInput.setValue(Configs.ASCIIFIER_INITIAL_TEXT);
         });
 
         addComponent(containerLayout);
