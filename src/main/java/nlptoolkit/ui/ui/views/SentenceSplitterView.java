@@ -51,7 +51,7 @@ public class SentenceSplitterView extends NLPView {
         NLPService nlpService = new NLPService();
         btn.addClickListener(e -> {
             txtOutput.clear();
-            String inputText = txtInput.getValue();
+            String inputText = txtInput.getValue().trim();
             ArrayList<Sentence> splittedSentences = nlpService.TurkishSplitter(inputText);
             for (Sentence ss : splittedSentences) {
                 txtOutput.setValue(txtOutput.getValue() + ss + "\n\n");

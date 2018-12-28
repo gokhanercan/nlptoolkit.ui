@@ -1,12 +1,15 @@
 package nlptoolkit.ui.ui.views;
 
 import Corpus.Sentence;
+import Dictionary.Word;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import nlptoolkit.ui.services.NLPService;
+
+import java.util.ArrayList;
 
 import static nlptoolkit.ui.ui.views.Utils.NEWLINE_SEPARATOR;
 import static nlptoolkit.ui.ui.views.Utils.bindButtonToFile;
@@ -16,7 +19,7 @@ public class SpellCheckerView extends NLPView {
     private final String INITIAL_SENTENCES = "İstanbül'da lokilde gezdik." +
             "\nİstanbül'da lokilde gezmedik.";
     private final String WORD_SEPARATOR = "|";
-    private final String MAPPING_SEPARATOR = "|";
+    private final String MAPPING_SEPARATOR = "=>";
     private final String DOWNLOAD_FILENAME = "spellCheckerResults.txt";
     private String fileContent = "";
 
@@ -62,41 +65,28 @@ public class SpellCheckerView extends NLPView {
     private void spellCheck(TextArea txtInput, TextArea txtOutput, boolean useNgram) {
         NLPService nlpService = new NLPService();
         txtOutput.clear();
-        String[] inputLines = txtInput.getValue().split("\n");
-        String[] outputLines = new String[inputLines.length];
-        StringBuilder output = new StringBuilder();
-        for (int i = 0; i < inputLines.length; i += 1) {
-            Sentence input = new Sentence(inputLines[i]);
-            Sentence corrected;
-            if (useNgram) {
-                corrected = nlpService.NGramSpellChecker(input);
-            } else {
-                corrected = nlpService.SpellChecker(input);
-            }
-            output.append(corrected.toString()).append("\n");
-            outputLines[i] = corrected.toString();
-        }
-        txtOutput.setValue(output.toString());
 
-        StringBuilder valueToCopy = new StringBuilder();
-        for (int i = 0; i < outputLines.length; i++) {
-            String inputLine = inputLines[i];
-            String outputLine = outputLines[i];
-            String[] inputWords = inputLine.split("\\s+");
-            String[] outputWords = outputLine.split("\\s+");
-            if (inputWords.length == outputWords.length) {
-                for (int j = 0; j < inputWords.length; j++) {
-                    String inputWord = inputWords[j];
-                    String outputWord = outputWords[j];
-                    String[] alignments = getAlignment(inputWord, outputWord);
-                    valueToCopy.append(alignments[0]).append(MAPPING_SEPARATOR).append(alignments[1]).append(WORD_SEPARATOR);
+        ArrayList<Sentence> inputSentences = nlpService.TurkishSplitter(txtInput.getValue().replace("\n", " ").trim());
+        StringBuilder downloadString = new StringBuilder();
+        StringBuilder outputToShow = new StringBuilder();
+        for (Sentence inputSentence : inputSentences) {
+            for (Word inputWord : inputSentence.getWords()) {
+                Sentence corrected;
+                if (useNgram) {
+                    corrected = nlpService.NGramSpellChecker(new Sentence(inputWord.toString()));
+                } else {
+                    corrected = nlpService.SpellChecker(new Sentence(inputWord.toString()));
                 }
-                valueToCopy.append(NEWLINE_SEPARATOR);
-            } else {
-                valueToCopy.append("Different IO length! Couldn't align.");
+                String outputWord = corrected.toString();
+                outputToShow.append(outputWord).append(" ");
+                String[] alignments = getAlignment(inputWord.toString(), outputWord);
+                downloadString.append(alignments[0]).append(MAPPING_SEPARATOR).append(alignments[1]).append(WORD_SEPARATOR);
             }
+            outputToShow.append(NEWLINE_SEPARATOR);
+            downloadString.append(NEWLINE_SEPARATOR);
         }
-        fileContent = valueToCopy.toString();
+        txtOutput.setValue(outputToShow.toString());
+        fileContent = downloadString.toString();
     }
 
     private String[] getAlignment(String word1, String word2) {

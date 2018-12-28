@@ -16,6 +16,7 @@ public class MorphologicalAnalyzerDisambiguatorView extends NLPView {
     private String INITIAL_SENTENCES = "Gözlükçü dükkanına gittim .";
     private final String DOWNLOAD_FILENAME = "morphologicalAnalysisResults.txt";
     private final String SEPARATOR = "|";
+    private final int CHAR_LIMIT = 1000;
 
     @Override
     public String GetScreenName() {
@@ -28,8 +29,8 @@ public class MorphologicalAnalyzerDisambiguatorView extends NLPView {
         HorizontalLayout console = new HorizontalLayout();
         console.setSizeFull();
         console.setResponsive(true);
-        TextArea txtInput = new TextArea("Type sentence to morphologically analyze:", INITIAL_SENTENCES);
-
+        TextArea txtInput = new TextArea("Type one sentence to morphologically analyze up to " +
+                CHAR_LIMIT + " characters:", INITIAL_SENTENCES);
         txtInput.setSizeFull();
         txtInput.setResponsive(true);
         txtInput.setRows(5);
@@ -50,7 +51,9 @@ public class MorphologicalAnalyzerDisambiguatorView extends NLPView {
 
         btnAnalyze.addClickListener(e -> {
             resultsGrid.removeAllColumns();
-            Sentence s = new Sentence(txtInput.getValue());
+            String input = txtInput.getValue().replace("\n", " ");
+            input = input.substring(0, Math.min(CHAR_LIMIT, input.length()));
+            Sentence s = nlpService.TurkishSplitter(input).get(0);
             ArrayList<DisambiguationResult> results = nlpService.analyzeAndDisambiguate(s);
             resultsGrid.setItems(results);
             resultsGrid.addColumn(DisambiguationResult::getWord).setCaption("Word");

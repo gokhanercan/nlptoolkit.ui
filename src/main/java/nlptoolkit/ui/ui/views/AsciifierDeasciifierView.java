@@ -1,10 +1,13 @@
 package nlptoolkit.ui.ui.views;
 
 import Corpus.Sentence;
+import Dictionary.Word;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import nlptoolkit.ui.nlp.DeascifierTypes;
 import nlptoolkit.ui.services.NLPService;
+
+import java.util.ArrayList;
 
 import static nlptoolkit.ui.ui.views.Utils.NEWLINE_SEPARATOR;
 import static nlptoolkit.ui.ui.views.Utils.bindButtonToFile;
@@ -14,6 +17,9 @@ public class AsciifierDeasciifierView extends NLPView {
     private final String INITIAL_INPUTS = "öğretmen\nşaşırmak\nIstanbul\nİstanbul\nitiraz\nüzüm\n";
     private final String DOWNLOAD_FILENAME = "asciifierResults.txt";
     private final String WORD_SEPARATOR = "|";
+    private final int CHAR_LIMIT = 10000;
+    private final String MAPPING_SEPARATOR = "=>";
+
     @Override
     public String GetScreenName() {
         return "Asciifier / Deasciifier";
@@ -26,7 +32,8 @@ public class AsciifierDeasciifierView extends NLPView {
         final HorizontalLayout textAreas = new HorizontalLayout();
         final VerticalLayout inputArea = new VerticalLayout();
         textAreas.setSizeFull();
-        TextArea txtInput = new TextArea("Please type words/sentences to asciify:", INITIAL_INPUTS);
+        TextArea txtInput = new TextArea("Please type words/sentences to asciify up to " +
+                CHAR_LIMIT + " characters:", INITIAL_INPUTS);
         txtInput.setRows(10);
         txtInput.setSizeFull();
 
@@ -35,7 +42,8 @@ public class AsciifierDeasciifierView extends NLPView {
         inputArea.addComponents(txtInput, btnAsciify);
 
         final VerticalLayout outputArea = new VerticalLayout();
-        TextArea txtOutput = new TextArea("Asciified results for words/sentences:");
+        TextArea txtOutput = new TextArea("Asciified results/inputs for words/sentences up to " +
+                CHAR_LIMIT + " chracters:");
         txtOutput.setSizeFull();
         txtOutput.setRows(10);
 
@@ -57,39 +65,56 @@ public class AsciifierDeasciifierView extends NLPView {
         Button btnReset = new Button("Reset");
         Button downloadButton = new Button("Download Mappings");
         buttonsLayout.addComponents(btnReset, downloadButton);
-//        TextField txtMappings = new TextField("Copy \"|\" separated Results From Here!");
-//        txtMappings.setSizeFull();
 
         containerLayout.addComponents(textAreas, buttonsLayout);
         containerLayout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_CENTER);
         containerLayout.setMargin(false);
 
-
         //Action
         NLPService nlpService = new NLPService();
         btnAsciify.addClickListener(e -> {
             txtOutput.clear();
-            String[] lines = txtInput.getValue().split("\n");
-            for (String line : lines) {
-                Sentence mysentence = new Sentence(line);
-                Sentence ascisentence = nlpService.Asciify(mysentence);
-                String correctSentence = ascisentence.toString();
-                txtOutput.setValue(txtOutput.getValue() + correctSentence + "\n");
+            String input = txtInput.getValue().replace("\n", " ").trim();
+            input = input.substring(0, Math.min(CHAR_LIMIT, input.length()));
+            ArrayList<Sentence> inputSentences = nlpService.TurkishSplitter(input);
+            StringBuilder downloadString = new StringBuilder();
+            StringBuilder outputToShow = new StringBuilder();
+            for (Sentence inputSentence : inputSentences) {
+                for (Word inputWord : inputSentence.getWords()) {
+                    String outputWord = nlpService.Asciify(new Sentence(inputWord.toString())).toString();
+                    outputToShow.append(outputWord).append(" ");
+                    downloadString.append(inputWord.toString()).append(MAPPING_SEPARATOR).append(outputWord).append(WORD_SEPARATOR);
+                }
+                outputToShow.append(NEWLINE_SEPARATOR);
+                downloadString.append(NEWLINE_SEPARATOR);
             }
-            bindButtonToFile(downloadButton, DOWNLOAD_FILENAME, getMapping(txtInput, txtOutput));
-//            txtMappings.setValue(getMapping(txtInput, txtOutput));
+            txtOutput.setValue(outputToShow.toString());
+            bindButtonToFile(downloadButton, DOWNLOAD_FILENAME, downloadString.toString());
         });
         btnDeasciify.addClickListener(e -> {
             txtInput.clear();
-            String[] lines = txtOutput.getValue().split("\n");
-            DeascifierTypes type = cmbDeasciifier.getSelectedItem().toString().equals("Simple") ? DeascifierTypes.Simple : DeascifierTypes.Ngram;        //support only two implementation
-            for (String line : lines) {
-                Sentence mysentence = new Sentence(line);
-                Sentence outSentence = nlpService.Deasciify(mysentence, type);
-                txtInput.setValue(txtInput.getValue() + outSentence + "\n");
+            DeascifierTypes type;        //support only two implementation
+            if (cmbDeasciifier.getSelectedItem().toString().equals("Simple")) {
+                type = DeascifierTypes.Simple;
+            } else {
+                type = DeascifierTypes.Ngram;
             }
-//            txtMappings.setValue(getMapping(txtInput, txtOutput));
-            bindButtonToFile(downloadButton, DOWNLOAD_FILENAME, getMapping(txtInput, txtOutput));
+            String input = txtOutput.getValue().replace("\n", " ").trim();
+            input = input.substring(0, Math.min(CHAR_LIMIT, input.length()));
+            ArrayList<Sentence> inputSentences = nlpService.TurkishSplitter(input);
+            StringBuilder downloadString = new StringBuilder();
+            StringBuilder outputToShow = new StringBuilder();
+            for (Sentence inputSentence : inputSentences) {
+                for (Word inputWord : inputSentence.getWords()) {
+                    String outputWord = nlpService.Deasciify(new Sentence(inputWord.toString()), type).toString();
+                    outputToShow.append(outputWord).append(" ");
+                    downloadString.append(inputWord.toString()).append(MAPPING_SEPARATOR).append(outputWord).append(WORD_SEPARATOR);
+                }
+                outputToShow.append(NEWLINE_SEPARATOR);
+                downloadString.append(NEWLINE_SEPARATOR);
+            }
+            txtInput.setValue(outputToShow.toString());
+            bindButtonToFile(downloadButton, DOWNLOAD_FILENAME, downloadString.toString());
         });
         btnReset.addClickListener(e -> {
             txtOutput.clear();
@@ -98,19 +123,5 @@ public class AsciifierDeasciifierView extends NLPView {
         });
 
         addComponent(containerLayout);
-    }
-
-    private String getMapping(TextArea txtInput, TextArea txtOutput) {
-        String[] inputs = txtInput.getValue().split("\n");
-        String[] outputs = txtOutput.getValue().split("\n");
-        if (inputs.length == outputs.length) {
-            StringBuilder mapping = new StringBuilder();
-            for (int i = 0; i < inputs.length; i++) {
-                mapping.append(inputs[i]).append(WORD_SEPARATOR).append(outputs[i]).append(NEWLINE_SEPARATOR);
-            }
-
-            return mapping.toString();
-        }
-        return "";
     }
 }
