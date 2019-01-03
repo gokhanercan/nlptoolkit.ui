@@ -34,6 +34,7 @@ public class SpellCheckerView extends NLPView {
         TextArea txtOutput = new TextArea("Output for SpellChecker");
         txtOutput.setSizeFull();
         txtOutput.setRows(10);
+        txtOutput.setReadOnly(true);
         row1.addComponents(txtInput, txtOutput);
 
         Button btn1 = new Button("SpellChecker");

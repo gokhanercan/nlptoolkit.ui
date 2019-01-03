@@ -31,6 +31,7 @@ public class SentenceSplitterView extends NLPView {
                 Configs.SENTENCE_SPLITTER_CHAR_LIMIT + " characters:");
         txtOutput.setSizeFull();
         txtOutput.setRows(15);
+        txtOutput.setReadOnly(true);
         Button btn = new Button("Tokenize/Split");
         btn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         row1.addComponents(txtInput, txtOutput);
