@@ -60,7 +60,8 @@ public class MainView extends NLPView {
     }
 
     public void ShowHomeContent() {
-        Label lbl = new Label("Homepage content here...");
+        Label lbl = new Label("This is an interface for quick testing of the Turkish NLP toolkit project" +
+                " hosted by Olcay Taner Yıldız. For the source codes, please visit: https://github.com/olcaytaner");
         this.MainPanel.setContent(lbl);
     }
 
